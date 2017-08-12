@@ -1,16 +1,20 @@
 from django.shortcuts import render, get_object_or_404 , redirect
 from django.utils import timezone
+from django.contrib.auth.decorators import login_required
 from .models import Post
 from .forms import PostForm
 
+@login_required #Django ships with some nice helpers for doing that, called decorators.
 def post_list(request):
     posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('published_date')
     return render(request, 'blog/post_list.html',{'posts': posts})
 
+@login_required #Django ships with some nice helpers for doing that, called decorators.
 def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
     return render(request, 'blog/post_detail.html', {'post': post})
 
+@login_required #Django ships with some nice helpers for doing that, called decorators.
 def post_new(request):
     if request.method == "POST":
         form = PostForm(request.POST)
@@ -24,6 +28,7 @@ def post_new(request):
         form = PostForm()
     return render(request, 'blog/post_edit.html', {'form': form})
 
+@login_required #Django ships with some nice helpers for doing that, called decorators.
 def post_edit(request, pk):
     post = get_object_or_404(Post, pk=pk)
     if request.method == "POST":
